@@ -4,13 +4,15 @@ import (
 	"database/sql"
 	_ "github.com/lib/pq"
 	"log"
+	"os"
 )
 
 var Db *sql.DB
 
 func init() {
+	dataSource := os.Getenv("WEB_APP_DB_URI")
 	var err error
-	Db, err = sql.Open("postgres", "postgres://webapp:webapp.123@127.0.0.1:5432/webapp?sslmode=disable")
+	Db, err = sql.Open("postgres", dataSource)
 	if err != nil {
 		log.Fatal(err)
 	}

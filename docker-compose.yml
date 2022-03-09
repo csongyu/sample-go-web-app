@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      - POSTGRES_DB=webapp
+      - POSTGRES_USER=webapp
+      - POSTGRES_PASSWORD=webapp.123
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./postgres-data:/var/lib/postgresql/data
+  webapp:
+    links:
+      - db
+    build: .
+    ports:
+      - 8080:8080
+    restart: always
+    environment:
+      - WEB_APP_DB_URI=postgres://webapp:webapp.123@db:5432/webapp?sslmode=disable
